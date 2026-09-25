@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#102d33" />
-    <meta name="description" content="AI、系统、EDA 与形式化方法领域的论文投稿时间表。查看官方截稿日期、北京时间、来源和月历。" />
+    <meta name="description" content="输入研究方向，查找相关会议及官方投稿节点；也可按时间线或月历查看 AI、系统、EDA 与形式化方法会议。" />
     <title>论文投稿时间表 · Paper Timeline</title>
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./styles.css" />
@@ -34,7 +34,7 @@
           </div>
           <div class="hero-aside">
             <div class="next-panel">
-              <div class="next-panel-top"><span>距离最近的官方截稿</span><span class="next-panel-icon" aria-hidden="true">↗</span></div>
+              <div class="next-panel-top"><span id="hero-context">距离最近的官方截稿</span><span class="next-panel-icon" aria-hidden="true">↗</span></div>
               <div id="hero-next" class="next-panel-content">正在读取时间表…</div>
               <div class="next-panel-bottom"><span>只对已公布日期计算倒计时</span><span aria-hidden="true">●</span></div>
             </div>
@@ -48,7 +48,14 @@
           </div>
 
           <div class="controls" aria-label="筛选时间表">
-            <div class="search-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"></circle><path d="m16 16 5 5"></path></svg><input id="search" type="search" placeholder="搜索会议、领域或关键词…" aria-label="搜索会议" autocomplete="off" /><kbd>/</kbd></div>
+            <div class="topic-control">
+              <div class="topic-control-heading"><div><p class="section-kicker">FIND YOUR VENUE</p><h3>输入研究方向，看看相关会议</h3></div><span>根据官方征稿或会议介绍整理主题标签</span></div>
+              <label class="topic-label" for="topic-search">研究方向或关键词</label>
+              <div class="topic-search-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"></circle><path d="m16 16 5 5"></path></svg><input id="topic-search" type="search" placeholder="例如：大模型推理、分布式系统、形式化验证…" autocomplete="off" /><button id="clear-topic" type="button" hidden>清除</button></div>
+              <div class="topic-examples" role="group" aria-label="试试这些研究方向"><span>试试：</span><button type="button" data-topic-example="大模型推理">大模型推理</button><button type="button" data-topic-example="自然语言处理">自然语言处理</button><button type="button" data-topic-example="EDA">EDA</button><button type="button" data-topic-example="分布式系统">分布式系统</button><button type="button" data-topic-example="形式化验证">形式化验证</button><button type="button" data-topic-example="编译器">编译器</button></div>
+              <p class="topic-explainer">匹配只用于探索投稿方向；是否适合投稿，请以各届官方 CFP 为准。</p>
+            </div>
+            <div class="search-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"></circle><path d="m16 16 5 5"></path></svg><input id="search" type="search" placeholder="搜索会议名称、简称或关键词…" aria-label="搜索会议" autocomplete="off" /><kbd>/</kbd></div>
             <div id="field-filters" class="field-filters" role="group" aria-label="按领域筛选"></div>
             <div class="control-bottom">
               <div id="status-filters" class="status-filters" role="group" aria-label="按状态筛选"></div>
