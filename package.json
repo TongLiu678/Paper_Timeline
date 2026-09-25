@@ -1,0 +1,10 @@
+{
+  "name": "paper-timeline",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "check:data": "node scripts/check-data.js"
+  }
+}

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#102d33" />
+    <meta name="description" content="AI、系统、EDA 与形式化方法领域的论文投稿时间表。查看官方截稿日期、北京时间、来源和月历。" />
+    <title>论文投稿时间表 · Paper Timeline</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到时间表</a>
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="brand" href="./" aria-label="Paper Timeline 首页">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span>paper<span class="brand-dot">.</span>timeline</span>
+        </a>
+        <div class="header-right">
+          <span class="header-eyebrow">一个面向研究者的投稿日历</span>
+          <a class="header-link" href="https://github.com/TongLiu678/Paper_Timeline" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        </div>
+      </header>
+
+      <main id="main">
+        <section class="hero" aria-labelledby="page-title">
+          <div class="hero-glow" aria-hidden="true"></div>
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="eyebrow-line"></span> PAPER SUBMISSION TRACKER</p>
+            <h1 id="page-title">论文投稿<br /><em>时间表</em><span class="title-period">.</span></h1>
+            <p class="hero-description">把关注的会议放在同一张时间轴上。看清下一次截稿、投稿阶段和官方时区，从容安排研究节奏。</p>
+            <div class="hero-meta"><span class="meta-pulse" aria-hidden="true"></span><span id="verified-on">官方信息核对中</span><span class="meta-divider"></span><span>有明确时刻的节点换算为北京时间</span></div>
+          </div>
+          <div class="hero-aside">
+            <div class="next-panel">
+              <div class="next-panel-top"><span>距离最近的官方截稿</span><span class="next-panel-icon" aria-hidden="true">↗</span></div>
+              <div id="hero-next" class="next-panel-content">正在读取时间表…</div>
+              <div class="next-panel-bottom"><span>只对已公布日期计算倒计时</span><span aria-hidden="true">●</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="workspace" aria-labelledby="workspace-title">
+          <div class="workspace-intro">
+            <div><p class="section-kicker">THE DEADLINE INDEX</p><h2 id="workspace-title">接下来，投向哪里？</h2></div>
+            <div id="stats" class="stats" aria-live="polite"></div>
+          </div>
+
+          <div class="controls" aria-label="筛选时间表">
+            <div class="search-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"></circle><path d="m16 16 5 5"></path></svg><input id="search" type="search" placeholder="搜索会议、领域或关键词…" aria-label="搜索会议" autocomplete="off" /><kbd>/</kbd></div>
+            <div id="field-filters" class="field-filters" role="group" aria-label="按领域筛选"></div>
+            <div class="control-bottom">
+              <div id="status-filters" class="status-filters" role="group" aria-label="按状态筛选"></div>
+              <div class="view-tools">
+                <button id="export-ics" class="export-button" type="button" title="导出当前筛选结果中即将到来的官方截止时间"><span aria-hidden="true">↓</span> 导出日历</button>
+                <div id="view-switch" class="view-switch" role="group" aria-label="选择展示方式"><button type="button" data-view="timeline" class="is-active" aria-pressed="true">时间线</button><button type="button" data-view="calendar" aria-pressed="false">月历</button></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-head"><div><span class="content-head-dot" aria-hidden="true"></span><span id="result-label">正在读取…</span></div><span id="time-note">日期以会议官网为准</span></div>
+          <div id="timeline-view" class="view"></div>
+          <div id="calendar-view" class="view" hidden></div>
+        </section>
+      </main>
+
+      <footer class="site-footer"><div><strong>paper.timeline</strong><span>把每一个重要节点，放在看得见的地方。</span></div><p>日期来自各会议官方征稿页面。新一届尚未公布时明确标注“待公布”；投稿前请再次查看官网。</p></footer>
+    </div>
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
