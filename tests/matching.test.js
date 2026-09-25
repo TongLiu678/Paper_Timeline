@@ -157,3 +157,25 @@ test("common research-area wording does not leave relevant published venues invi
   assert.ok(ids("计算机架构").includes("micro"));
   assert.equal(ids("AI系统")[0], "mlsys");
 });
+
+test("music and large-model wording finds the specialist conferences", () => {
+  const ids = (query) => matchConferences(publishedConferences, query, now).map(({ conference }) => conference.id);
+  for (const query of ["音乐和大模型", "音乐与大语言模型", "音乐+大模型", "music LLM", "music+LLM"]) {
+    const result = ids(query);
+    assert.ok(result.includes("ismir"), `${query} should include ISMIR`);
+    assert.ok(result.includes("aimc"), `${query} should include AIMC`);
+    for (const id of ["colm", "neurips", "mmsys"]) {
+      assert.ok(result.includes(id), `${query} should include conditional venue ${id}`);
+    }
+  }
+});
+
+test("music subtopics map to venues with the corresponding research scope", () => {
+  const ids = (query) => matchConferences(publishedConferences, query, now).map(({ conference }) => conference.id);
+  for (const id of ["ismir", "aimc", "icmc"]) assert.ok(ids("音乐生成").includes(id));
+  assert.ok(ids("文生音乐").includes("ismir"));
+  for (const id of ["icassp", "interspeech"]) assert.ok(ids("音频语言模型").includes(id));
+  for (const id of ["ismir", "icassp", "interspeech"]) assert.ok(ids("歌声").includes(id));
+  for (const id of ["ismir", "icmr"]) assert.ok(ids("音乐检索").includes(id));
+  assert.ok(!ids("音乐检索").includes("nime"), "performance-interface venues should not rank as retrieval venues");
+});

@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#102d33" />
-    <meta name="description" content="输入研究方向，查找相关会议及官方投稿节点；也可按时间线或月历查看 AI、系统、EDA 与形式化方法会议。" />
+    <meta name="description" content="输入研究方向，查找相关会议及官方投稿节点；也可按时间线或月历查看 AI、音乐与音频、系统、EDA 与形式化方法会议。" />
     <title>论文投稿时间表 · Paper Timeline</title>
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=2026-09-25-music" />
   </head>
   <body>
     <a class="skip-link" href="#main">跳到时间表</a>
@@ -51,8 +51,8 @@
             <div class="topic-control">
               <div class="topic-control-heading"><div><p class="section-kicker">FIND YOUR VENUE</p><h3>输入研究方向，看看相关会议</h3></div><span>根据官方征稿或会议介绍整理主题标签</span></div>
               <label class="topic-label" for="topic-search">研究方向或关键词</label>
-              <div class="topic-search-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"></circle><path d="m16 16 5 5"></path></svg><input id="topic-search" type="search" placeholder="例如：大模型推理、分布式系统、形式化验证…" autocomplete="off" /><button id="clear-topic" type="button" hidden>清除</button></div>
-              <div class="topic-examples" role="group" aria-label="试试这些研究方向"><span>试试：</span><button type="button" data-topic-example="大模型推理">大模型推理</button><button type="button" data-topic-example="智能体">智能体</button><button type="button" data-topic-example="RAG">RAG</button><button type="button" data-topic-example="多模态">多模态</button><button type="button" data-topic-example="EDA">EDA</button><button type="button" data-topic-example="高性能计算">高性能计算</button><button type="button" data-topic-example="形式化验证">形式化验证</button><button type="button" data-topic-example="编译器">编译器</button></div>
+              <div class="topic-search-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"></circle><path d="m16 16 5 5"></path></svg><input id="topic-search" type="search" placeholder="例如：音乐大模型、大模型推理、形式化验证…" autocomplete="off" /><button id="clear-topic" type="button" hidden>清除</button></div>
+              <div class="topic-examples" role="group" aria-label="试试这些研究方向"><span>试试：</span><button type="button" data-topic-example="音乐与大模型">音乐与大模型</button><button type="button" data-topic-example="音乐生成">音乐生成</button><button type="button" data-topic-example="音乐检索">音乐检索</button><button type="button" data-topic-example="音频语言模型">音频语言模型</button><button type="button" data-topic-example="大模型推理">大模型推理</button><button type="button" data-topic-example="智能体">智能体</button><button type="button" data-topic-example="RAG">RAG</button><button type="button" data-topic-example="多模态">多模态</button><button type="button" data-topic-example="EDA">EDA</button><button type="button" data-topic-example="高性能计算">高性能计算</button><button type="button" data-topic-example="形式化验证">形式化验证</button><button type="button" data-topic-example="编译器">编译器</button></div>
               <p class="topic-explainer">只在当前已收录会议中匹配；结果用于探索方向，具体投稿范围以各届官方 CFP 为准。</p>
             </div>
             <div class="search-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"></circle><path d="m16 16 5 5"></path></svg><input id="search" type="search" placeholder="搜索会议名称、简称或关键词…" aria-label="搜索会议" autocomplete="off" /><kbd>/</kbd></div>
@@ -74,6 +74,6 @@
 
       <footer class="site-footer"><div><strong>paper.timeline</strong><span>把每一个重要节点，放在看得见的地方。</span></div><p>日期来自各会议官方征稿页面。新一届尚未公布时明确标注“待公布”；投稿前请再次查看官网。</p></footer>
     </div>
-    <script type="module" src="./src/app.js"></script>
+    <script type="module" src="./src/app.js?v=2026-09-25-music"></script>
   </body>
 </html>

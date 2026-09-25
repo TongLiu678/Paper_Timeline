@@ -1,10 +1,10 @@
-import { conferences, verifiedOn } from "./conferences.js";
+import { conferences, verifiedOn } from "./conferences.js?v=2026-09-25-music";
 import {
   FIELD_LABELS, daysUntil, deadlineSortValue, filterConferences, formatShanghaiTime,
   getNextMilestone, getStatus, getUpcomingMilestones, isUpcoming,
   monthKey, shanghaiDateKey, sortByNextMilestone, toIcs,
-} from "./dates.js";
-import { matchConferences } from "./matching.js";
+} from "./dates.js?v=2026-09-25-music";
+import { matchConferences } from "./matching.js?v=2026-09-25-music";
 
 const $ = (selector) => document.querySelector(selector);
 const state = { topic: "", query: "", field: "all", status: "all", view: "timeline", month: shanghaiDateKey(new Date()).slice(0, 7) };

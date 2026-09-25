@@ -4,6 +4,7 @@ export const FIELD_LABELS = {
   eda: "EDA",
   systems: "操作系统 · 系统",
   formal: "形式化 · PL",
+  music: "音乐 · 音频",
 };
 
 const shanghaiDay = new Intl.DateTimeFormat("en-CA", {
