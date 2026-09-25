@@ -1,5 +1,5 @@
-import { deadlineSortValue, getNextMilestone } from "./dates.js?v=2026-09-25-music";
-import { conferenceProfiles, topicCatalog } from "./topic-data.js?v=2026-09-25-music";
+import { deadlineSortValue, getNextMilestone } from "./dates.js?v=2026-09-25-board";
+import { conferenceProfiles, topicCatalog } from "./topic-data.js?v=2026-09-25-board";
 
 // A topic may have several aliases in one query, but it should contribute only
 // once to a conference's score. Related directions are deliberately weaker.

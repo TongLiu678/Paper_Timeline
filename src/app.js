@@ -1,13 +1,14 @@
-import { conferences, verifiedOn } from "./conferences.js?v=2026-09-25-music";
+import { conferences, verifiedOn } from "./conferences.js?v=2026-09-25-board";
 import {
   FIELD_LABELS, daysUntil, deadlineSortValue, filterConferences, formatShanghaiTime,
   getNextMilestone, getStatus, getUpcomingMilestones, isUpcoming,
   monthKey, shanghaiDateKey, sortByNextMilestone, toIcs,
-} from "./dates.js?v=2026-09-25-music";
-import { matchConferences } from "./matching.js?v=2026-09-25-music";
+} from "./dates.js?v=2026-09-25-board";
+import { matchConferences } from "./matching.js?v=2026-09-25-board";
+import { conferenceProfiles } from "./topic-data.js?v=2026-09-25-board";
 
 const $ = (selector) => document.querySelector(selector);
-const state = { topic: "", query: "", field: "all", status: "all", view: "timeline", month: shanghaiDateKey(new Date()).slice(0, 7) };
+const state = { topic: "", query: "", field: "all", status: "all", view: "board", month: shanghaiDateKey(new Date()).slice(0, 7) };
 const fieldOrder = ["all", ...Object.keys(FIELD_LABELS)];
 const statusLabels = { all: "全部会议", upcoming: "即将截止", pending: "待公布", ended: "已结束" };
 
@@ -156,6 +157,64 @@ function renderMatchTimeline(matches, totalMatches) {
   $("#timeline-view").innerHTML = `<section aria-label="研究方向匹配结果"><div class="match-intro"><div><p class="section-kicker">MATCHED CONFERENCES</p><h3>已收录会议中与“${escapeHtml(state.topic.trim())}”相关的结果</h3></div><p>按主题相关度排列；同等相关时优先显示较近的已公布节点。</p></div><div class="match-grid">${matches.map(renderMatchCard).join("")}</div></section>`;
 }
 
+function renderBoardCard({ conference, profile, matchedTopics = [], reasons = [] }) {
+  const status = getStatus(conference);
+  const next = getNextMilestone(conference);
+  const statusLabel = status === "upcoming" ? "已公布" : status === "ended" ? "已结束" : "待公布";
+  const sorted = [...conference.deadlines].sort((a, b) => deadlineSortValue(a) - deadlineSortValue(b));
+  const topics = matchedTopics.length
+    ? matchedTopics.map(({ label, relation }) => `<span class="board-topic ${relation === "related" ? "is-related" : ""}">${relation === "related" ? "相关：" : "匹配："}${escapeHtml(label)}</span>`).join("")
+    : state.topic.trim() ? reasons.map((reason) => `<span class="board-topic">${escapeHtml(reason)}</span>`).join("") : "";
+  const deadline = next
+    ? `<span class="board-date-label">下一官方节点 · ${escapeHtml(countdown(next))}</span><strong>${escapeHtml(next.label)} · ${escapeHtml(formatShanghaiTime(next))}</strong><span>官网原时区：${escapeHtml(next.originalTime)}</span><a href="${escapeHtml(next.source)}" target="_blank" rel="noopener noreferrer">核对这个节点 ↗</a>`
+    : `<span class="board-date-label">${status === "ended" ? "会议系列已结束" : "下一轮时间待公布"}</span><strong>${status === "ended" ? "无未来投稿节点" : "请等待官方 CFP"}</strong><span>不根据往届日期推算新一届截稿。</span>`;
+  return `<article class="board-card field-border-${escapeHtml(conference.field)} is-${status}">
+    <div class="board-card-top">${fieldBadge(conference)}<span class="board-card-index">${statusLabel}</span></div>
+    <h4>${escapeHtml(conference.acronym)} <span>${escapeHtml(conference.edition)}</span></h4>
+    <p class="board-card-name">${escapeHtml(conference.nameZh || conference.name)}</p>
+    ${profile?.summary ? `<p class="board-card-summary">${escapeHtml(profile.summary)}</p>` : ""}
+    ${topics ? `<div class="board-card-topics" aria-label="实际命中的研究主题">${topics}</div>` : ""}
+    <div class="board-card-deadline">${deadline}</div>
+    ${conference.alert ? `<p class="card-alert"><span aria-hidden="true">!</span>${escapeHtml(conference.alert)}</p>` : ""}
+    <details class="deadline-details"><summary>全部投稿节点与说明 <span aria-hidden="true">＋</span></summary>${sorted.length ? `<ol class="milestone-list">${sorted.map((item) => renderMilestoneRow(item, conference)).join("")}</ol>` : `<p class="conference-note">官网尚未公布投稿节点。</p>`}${conference.note ? `<p class="conference-note">${escapeHtml(conference.note)}</p>` : ""}</details>
+    <div class="board-card-footer"><a href="${escapeHtml(conference.cfp)}" target="_blank" rel="noopener noreferrer">官方会议页面 ↗</a></div>
+  </article>`;
+}
+
+function renderBoard(items, matches, totalMatches) {
+  const hasTopic = Boolean(state.topic.trim());
+  const cards = hasTopic ? matches : items.map((conference) => ({ conference, profile: conferenceProfiles[conference.id] }));
+  const groups = hasTopic
+    ? [
+      { title: "近期官方节点", note: "约 30 天内", items: cards.filter(({ conference }) => { const next = getNextMilestone(conference); return next && daysUntil(next) <= 30; }) },
+      { title: "之后的官方节点", note: "按截稿日期排列", items: cards.filter(({ conference }) => { const next = getNextMilestone(conference); return next && daysUntil(next) > 30; }) },
+      { title: "下一轮待公布", note: "不推测日期", items: cards.filter(({ conference }) => getStatus(conference) === "pending") },
+      { title: "已结束系列", note: "保留参考", items: cards.filter(({ conference }) => getStatus(conference) === "ended") },
+    ]
+    : fieldOrder.slice(1).map((field) => ({ title: FIELD_LABELS[field], note: "研究领域", items: cards.filter(({ conference }) => conference.field === field) }));
+  const statusOrder = { upcoming: 0, pending: 1, ended: 2 };
+  for (const group of groups) group.items.sort((a, b) => {
+    const statusDifference = statusOrder[getStatus(a.conference)] - statusOrder[getStatus(b.conference)];
+    if (statusDifference) return statusDifference;
+    const nextA = getNextMilestone(a.conference);
+    const nextB = getNextMilestone(b.conference);
+    if (nextA && nextB) return deadlineSortValue(nextA) - deadlineSortValue(nextB)
+      || a.conference.acronym.localeCompare(b.conference.acronym, "en");
+    return a.conference.acronym.localeCompare(b.conference.acronym, "en");
+  });
+  const shownGroups = groups.filter((group) => group.items.length);
+  const matchedTopicLabels = hasTopic ? [...new Set(matches.flatMap(({ matchedTopics }) => matchedTopics.map(({ label }) => label)))] : [];
+  const originTitle = hasTopic ? state.topic.trim() : "研究方向总览";
+  const originCopy = hasTopic
+    ? `已收录会议中匹配 ${totalMatches} 场${cards.length !== totalMatches ? `，当前筛选显示 ${cards.length} 场` : ""}。卡片中的标签标明每场会议实际命中的主题。`
+    : `当前展示 ${cards.length} 场会议。输入研究方向后，白板会连出相应会议与下一官方投稿节点。`;
+  const intro = hasTopic ? "研究方向 → 相关会议 → 官方节点" : "按领域查看所有已收录会议";
+  const content = shownGroups.length
+    ? `<div class="board-flow">${shownGroups.map(({ title, note, items: groupItems }) => `<section class="board-group" aria-label="${escapeHtml(title)}"><div class="board-group-head"><div><h4 class="board-group-title">${escapeHtml(title)}</h4><span>${escapeHtml(note)}</span></div><span class="board-group-count">${groupItems.length} 场</span></div><div class="board-cards">${groupItems.map(renderBoardCard).join("")}</div></section>`).join("")}</div>`
+    : `<div class="board-empty"><strong>${totalMatches > 0 ? "其他筛选条件没有命中" : hasTopic ? "暂未找到这个方向的会议" : "当前没有符合条件的会议"}</strong><p>${totalMatches > 0 ? "清除会议名称、领域或状态筛选，即可看到这个方向已有的结果。" : "试试“音乐与大模型”“EDA”或“形式化验证”等方向。"}</p>${totalMatches > 0 ? `<button type="button" data-clear-filters>清除其他筛选</button>` : ""}</div>`;
+  $("#board-view").innerHTML = `<section class="board-shell" aria-label="投稿方向白板"><div class="board-toolbar"><div class="board-toolbar-copy"><p class="section-kicker">RESEARCH MAP</p><h3>${hasTopic ? "你的投稿方向图" : "会议白板"}</h3><p>${intro}。所有会议平等展示；日期均来自官方页面。</p></div><div class="board-legend"><span>● 已公布日期</span><span>○ 下一轮待公布</span></div></div><div class="board-canvas"><div class="board-origin"><span class="board-origin-label">${hasTopic ? "你的研究方向" : "从这里开始"}</span><strong class="board-origin-title">${escapeHtml(originTitle)}</strong><p class="board-origin-copy">${escapeHtml(originCopy)}</p>${matchedTopicLabels.length ? `<div class="board-origin-topics">${matchedTopicLabels.map((label) => `<span class="board-origin-topic">${escapeHtml(label)}</span>`).join("")}</div>` : ""}</div>${content}</div></section>`;
+}
+
 function renderTimeline(items) {
   const upcoming = sortByNextMilestone(items.filter((item) => getStatus(item) === "upcoming"));
   const pending = items.filter((item) => getStatus(item) === "pending").sort((a, b) => a.acronym.localeCompare(b.acronym));
@@ -215,7 +274,8 @@ function render() {
   $("#result-label").textContent = state.topic.trim()
     ? `已收录 ${conferences.length} 场中匹配 ${totalMatches} 场${filtered.length !== totalMatches ? ` · 当前筛选显示 ${filtered.length} 场` : ""}`
     : `找到 ${filtered.length} 场会议`;
-  $("#time-note").textContent = state.view === "timeline" ? "具体时刻换算为北京时间" : "无具体时刻的节点按官网日期显示";
+  $("#time-note").textContent = state.view === "board" ? "连线表示筛选关系，投稿节点请以官网为准" : state.view === "timeline" ? "具体时刻换算为北京时间" : "无具体时刻的节点按官网日期显示";
+  $("#board-view").hidden = state.view !== "board";
   $("#timeline-view").hidden = state.view !== "timeline";
   $("#calendar-view").hidden = state.view !== "calendar";
   for (const button of $("#view-switch").querySelectorAll("button")) {
@@ -223,7 +283,8 @@ function render() {
     button.classList.toggle("is-active", selected);
     button.setAttribute("aria-pressed", String(selected));
   }
-  if (state.view === "timeline") {
+  if (state.view === "board") renderBoard(filtered, matches, totalMatches);
+  else if (state.view === "timeline") {
     if (state.topic.trim()) renderMatchTimeline(matches, totalMatches);
     else renderTimeline(filtered);
   }
@@ -256,6 +317,7 @@ $("#status-filters").addEventListener("click", (event) => { const button = event
 $("#view-switch").addEventListener("click", (event) => { const button = event.target.closest("[data-view]"); if (button) { state.view = button.dataset.view; render(); } });
 $("#calendar-view").addEventListener("click", (event) => { const button = event.target.closest("[data-calendar]"); if (!button) return; if (button.dataset.calendar === "today") { state.month = shanghaiDateKey(new Date()).slice(0, 7); render(); } else changeMonth(Number(button.dataset.calendar)); });
 $("#timeline-view").addEventListener("click", (event) => { const clearButton = event.target.closest("[data-clear-filters]"); if (clearButton) { state.field = "all"; state.status = "all"; state.query = ""; $("#search").value = ""; render(); return; } const button = event.target.closest("[data-export]"); if (!button) return; const conference = conferences.find((item) => item.id === button.dataset.export); if (conference) downloadIcs(getUpcomingMilestones([conference]), `${conference.acronym.toLowerCase()}-deadlines.ics`); });
+$("#board-view").addEventListener("click", (event) => { if (!event.target.closest("[data-clear-filters]")) return; state.field = "all"; state.status = "all"; state.query = ""; $("#search").value = ""; render(); });
 $("#export-ics").addEventListener("click", () => { const { filtered } = visibleConferences(); downloadIcs(getUpcomingMilestones(filtered), "paper-timeline-deadlines.ics"); });
 document.addEventListener("keydown", (event) => { if (event.key === "/" && !["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) { event.preventDefault(); $("#search").focus(); } });
 
