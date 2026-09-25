@@ -1,6 +1,6 @@
 import { conferences, verifiedOn } from "./conferences.js";
 import {
-  FIELD_LABELS, daysUntil, filterConferences, formatShanghaiTime,
+  FIELD_LABELS, daysUntil, deadlineSortValue, filterConferences, formatShanghaiTime,
   getNextMilestone, getStatus, getUpcomingMilestones, isUpcoming,
   monthKey, shanghaiDateKey, sortByNextMilestone, toIcs,
 } from "./dates.js";
@@ -120,7 +120,8 @@ function renderUpcomingCard(conference) {
 }
 
 function renderPendingCard(conference, ended = false) {
-  const last = [...conference.deadlines].sort((a, b) => (b.at ?? b.date).localeCompare(a.at ?? a.date))[0];
+  const last = [...conference.deadlines].sort((a, b) =>
+    deadlineSortValue(b) - deadlineSortValue(a) || Number(b.kind === "paper") - Number(a.kind === "paper"))[0];
   const lastLabel = last ? `最近官方记录：${last.edition ?? conference.edition} 届 · ${last.label} ${niceDate(last.date)}` : "官网尚未公布论文投稿日期";
   return `<article class="pending-card" id="conf-${escapeHtml(conference.id)}"><div class="pending-symbol" aria-hidden="true">${ended ? "—" : "?"}</div><div class="pending-body"><div class="pending-top">${fieldBadge(conference)}<span class="pending-tag">${ended ? "已结束举办" : "下一轮待公布"}</span></div><h3>${escapeHtml(conference.acronym)} <span>${escapeHtml(conference.edition)}</span></h3><p>${escapeHtml(conference.nameZh || conference.name)}</p><small>${escapeHtml(lastLabel)}</small>${conference.note ? `<p class="pending-note">${escapeHtml(conference.note)}</p>` : ""}</div><a href="${escapeHtml(conference.cfp)}" target="_blank" rel="noopener noreferrer" class="pending-link">${ended ? "主办方说明" : "查看官网"} <span aria-hidden="true">↗</span></a></article>`;
 }
@@ -152,7 +153,7 @@ function renderMatchTimeline(matches, totalMatches) {
     $("#timeline-view").innerHTML = `<div class="empty-state"><span>⌕</span><h3>${filteredOut ? "当前其他筛选条件没有命中" : "暂未找到这个方向的会议"}</h3><p>${filteredOut ? "这个方向有相关会议，可清除领域、状态或会议名称筛选。" : "试试更具体或常见的研究词，例如“大模型推理”“EDA”“形式化验证”。"}</p>${filteredOut ? `<button type="button" data-clear-filters>清除其他筛选</button>` : ""}</div>`;
     return;
   }
-  $("#timeline-view").innerHTML = `<section aria-label="研究方向匹配结果"><div class="match-intro"><div><p class="section-kicker">MATCHED CONFERENCES</p><h3>与“${escapeHtml(state.topic.trim())}”相关的会议</h3></div><p>按主题相关度排列；同等相关时优先显示较近的已公布节点。</p></div><div class="match-grid">${matches.map(renderMatchCard).join("")}</div></section>`;
+  $("#timeline-view").innerHTML = `<section aria-label="研究方向匹配结果"><div class="match-intro"><div><p class="section-kicker">MATCHED CONFERENCES</p><h3>已收录会议中与“${escapeHtml(state.topic.trim())}”相关的结果</h3></div><p>按主题相关度排列；同等相关时优先显示较近的已公布节点。</p></div><div class="match-grid">${matches.map(renderMatchCard).join("")}</div></section>`;
 }
 
 function renderTimeline(items) {
@@ -211,7 +212,9 @@ function render() {
   const { filtered, matches, totalMatches } = visibleConferences();
   renderHero(filtered);
   $("#clear-topic").hidden = !state.topic;
-  $("#result-label").textContent = state.topic.trim() ? `方向匹配 ${filtered.length} 场会议` : `找到 ${filtered.length} 场会议`;
+  $("#result-label").textContent = state.topic.trim()
+    ? `已收录 ${conferences.length} 场中匹配 ${totalMatches} 场${filtered.length !== totalMatches ? ` · 当前筛选显示 ${filtered.length} 场` : ""}`
+    : `找到 ${filtered.length} 场会议`;
   $("#time-note").textContent = state.view === "timeline" ? "具体时刻换算为北京时间" : "无具体时刻的节点按官网日期显示";
   $("#timeline-view").hidden = state.view !== "timeline";
   $("#calendar-view").hidden = state.view !== "calendar";

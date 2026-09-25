@@ -139,9 +139,21 @@ test("unknown or blank queries return no guesses", () => {
 test("published profiles keep specific queries useful across broad fields", () => {
   const lookup = (query) => matchConferences(publishedConferences, query, now);
   assert.equal(lookup("大模型推理")[0].conference.id, "mlsys");
-  assert.deepEqual(lookup("AI for EDA").map(({ conference }) => conference.id).sort(), ["aspdac", "dac", "date", "iccad"]);
+  const aiEda = lookup("AI for EDA").map(({ conference }) => conference.id);
+  for (const id of ["dac", "iccad", "date", "aspdac", "mlcad", "ispd"]) assert.ok(aiEda.includes(id));
   const formal = lookup("形式化验证").map(({ conference }) => conference.id);
   assert.ok(formal.includes("cav") && formal.includes("iccad"));
   assert.equal(lookup("CPP")[0].conference.id, "cpp");
   assert.equal(lookup("系统").at(-1).conference.id, "usenix-atc");
+});
+
+test("common research-area wording does not leave relevant published venues invisible", () => {
+  const ids = (query) => matchConferences(publishedConferences, query, now).map(({ conference }) => conference.id);
+  assert.ok(ids("agent").includes("aaai"));
+  assert.ok(ids("多模态").includes("cvpr"));
+  assert.ok(ids("视觉语言模型").includes("iccv"));
+  assert.ok(ids("硬件").includes("isca"));
+  assert.ok(ids("network").includes("sigcomm"));
+  assert.ok(ids("计算机架构").includes("micro"));
+  assert.equal(ids("AI系统")[0], "mlsys");
 });
