@@ -1,11 +1,11 @@
-import { conferences, verifiedOn } from "./conferences.js?v=2026-09-25-board";
+import { conferences, verifiedOn } from "./conferences.js?v=2026-09-27-nlp";
 import {
   FIELD_LABELS, daysUntil, deadlineSortValue, filterConferences, formatShanghaiTime,
   getNextMilestone, getStatus, getUpcomingMilestones, isUpcoming,
   monthKey, shanghaiDateKey, sortByNextMilestone, toIcs,
-} from "./dates.js?v=2026-09-25-board";
-import { matchConferences } from "./matching.js?v=2026-09-25-board";
-import { conferenceProfiles } from "./topic-data.js?v=2026-09-25-board";
+} from "./dates.js?v=2026-09-27-nlp";
+import { matchConferences } from "./matching.js?v=2026-09-27-nlp";
+import { conferenceProfiles } from "./topic-data.js?v=2026-09-27-nlp";
 
 const $ = (selector) => document.querySelector(selector);
 const state = { topic: "", query: "", field: "all", status: "all", view: "board", month: shanghaiDateKey(new Date()).slice(0, 7) };
@@ -321,5 +321,5 @@ $("#board-view").addEventListener("click", (event) => { if (!event.target.closes
 $("#export-ics").addEventListener("click", () => { const { filtered } = visibleConferences(); downloadIcs(getUpcomingMilestones(filtered), "paper-timeline-deadlines.ics"); });
 document.addEventListener("keydown", (event) => { if (event.key === "/" && !["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) { event.preventDefault(); $("#search").focus(); } });
 
-$("#verified-on").textContent = `官方信息核对于 ${niceDate(verifiedOn)}`;
+$("#verified-on").textContent = `资料最近更新于 ${niceDate(verifiedOn)}`;
 render();

@@ -8,6 +8,7 @@
   --mint: #b9ebd9;
   --accent: #e9aa73;
   --ai: #7c77ca;
+  --nlp: #526bbb;
   --infra: #318f9a;
   --eda: #c18351;
   --systems: #4a8d68;
@@ -142,6 +143,7 @@ a { color: inherit; text-decoration: none; }
 .deadline-card { position: relative; display: grid; grid-template-columns: 96px minmax(0, 1fr) 154px; gap: 18px; background: #fff; border: 1px solid var(--line); border-radius: 13px; overflow: hidden; box-shadow: 0 4px 18px rgba(31, 68, 58, .025); }
 .deadline-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--card-field); }
 .field-border-ai { --card-field: var(--ai); }
+.field-border-nlp { --card-field: var(--nlp); }
 .field-border-infra { --card-field: var(--infra); }
 .field-border-eda { --card-field: var(--eda); }
 .field-border-systems { --card-field: var(--systems); }
@@ -154,6 +156,7 @@ a { color: inherit; text-decoration: none; }
 .card-topline, .pending-top { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
 .field-badge { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 5px; font-size: 10px; font-weight: 770; white-space: nowrap; background: color-mix(in srgb, var(--field-color) 13%, white); color: var(--field-color); }
 .field-ai { --field-color: var(--ai); }
+.field-nlp { --field-color: var(--nlp); }
 .field-infra { --field-color: var(--infra); }
 .field-eda { --field-color: var(--eda); }
 .field-systems { --field-color: var(--systems); }
@@ -306,6 +309,7 @@ a { color: inherit; text-decoration: none; }
 .board-card::before { content: ""; position: absolute; inset: 3px -4px -4px 4px; border: 1px solid rgba(68, 69, 75, .45); border-radius: 12px 9px 13px 8px; pointer-events: none; }
 .board-card::after { content: ""; position: absolute; left: 18px; top: -8px; width: 33px; height: 9px; border: 1px solid rgba(71, 66, 53, .21); border-radius: 2px; background: rgba(255, 240, 193, .7); transform: rotate(-4deg); pointer-events: none; }
 .board-card.field-border-ai { --card-field: var(--ai); }
+.board-card.field-border-nlp { --card-field: var(--nlp); }
 .board-card.field-border-infra { --card-field: var(--infra); }
 .board-card.field-border-eda { --card-field: var(--eda); }
 .board-card.field-border-systems { --card-field: var(--systems); }

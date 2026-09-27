@@ -1,5 +1,6 @@
 export const FIELD_LABELS = {
-  ai: "AI · NLP",
+  ai: "AI · ML",
+  nlp: "NLP · 语言",
   infra: "AI Infra · 架构",
   eda: "EDA",
   systems: "操作系统 · 系统",

@@ -6,10 +6,12 @@ import { aiExpandedConferences } from "./data/expanded-ai.js";
 import { systemsExpandedConferences } from "./data/expanded-systems.js";
 import { musicCoreConferences } from "./data/music-core.js";
 import { musicAdjacentConferences } from "./data/music-adjacent.js";
+import { nlpConferences } from "./data/nlp.js";
 
-export const verifiedOn = "2026-09-25";
+export const verifiedOn = "2026-09-27";
 export const conferences = [
   ...aiConferences,
+  ...nlpConferences,
   ...infraEdaConferences,
   ...systemsFormalConferences,
   ...aiExpandedConferences,
