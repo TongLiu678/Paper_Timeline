@@ -337,7 +337,7 @@ export const systemsFormalConferences = [
     field: "formal",
     edition: "2027",
     cfp: "https://pldi27.sigplan.org/track/pldi-2027-papers",
-    note: "官网已公布投稿日期，但完整研究论文 CFP 和摘要注册要求尚未发布。",
+    note: "官网已公布研究论文 CFP 与投稿日期；页面标注 AoE 时区，但未给出具体截止时刻。",
     keywords: ["程序语言", "编译器", "程序分析", "形式化"],
     deadlines: [
       {
@@ -345,8 +345,7 @@ export const systemsFormalConferences = [
         label: "研究论文提交",
         kind: "paper",
         date: "2026-11-12",
-        at: "2026-11-12T23:59:00-12:00",
-        originalTime: "2026-11-12 23:59 AoE",
+        originalTime: "2026-11-12 AoE（UTC−12；官网未注明时刻）",
         source: "https://pldi27.sigplan.org/track/pldi-2027-papers",
       },
     ],

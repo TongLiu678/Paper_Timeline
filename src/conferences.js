@@ -7,8 +7,9 @@ import { systemsExpandedConferences } from "./data/expanded-systems.js";
 import { musicCoreConferences } from "./data/music-core.js";
 import { musicAdjacentConferences } from "./data/music-adjacent.js";
 import { nlpConferences } from "./data/nlp.js";
+import { dslConferences } from "./data/dsl.js";
 
-export const verifiedOn = "2026-09-27";
+export const verifiedOn = "2026-10-12";
 export const conferences = [
   ...aiConferences,
   ...nlpConferences,
@@ -17,6 +18,7 @@ export const conferences = [
   ...aiExpandedConferences,
   ...systemsExpandedConferences,
   ...formalEdaExpandedConferences,
+  ...dslConferences,
   ...musicCoreConferences,
   ...musicAdjacentConferences,
 ];

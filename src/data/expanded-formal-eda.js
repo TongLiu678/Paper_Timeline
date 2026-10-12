@@ -25,10 +25,10 @@ export const formalEdaExpandedConferences = [
     field: "formal",
     edition: "2027",
     cfp: sources.fse,
-    note: "只列 2027 研究论文轨；官网另有产业、教育等轨道，投稿日期需分别核对。",
+    note: "只列 2027 研究论文轨；官网因 HotCRP 服务故障将截稿延至 10 月 3 日。产业、教育等轨道日期需分别核对。",
     keywords: ["软件工程", "程序分析", "软件测试", "模型检测"],
     deadlines: [
-      { id: "fse-2027-paper", label: "研究轨·全文截止", kind: "paper", date: "2026-10-02", originalTime: "2026-10-02 AoE（UTC−12；官网未注明时刻）", source: sources.fse },
+      { id: "fse-2027-paper", label: "研究轨·全文截止（延期后）", kind: "paper", date: "2026-10-03", originalTime: "2026-10-03 AoE（UTC−12；官网未注明时刻）", source: sources.fse },
     ],
   },
   {

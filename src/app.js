@@ -1,11 +1,11 @@
-import { conferences, verifiedOn } from "./conferences.js?v=2026-09-27-nlp";
+import { conferences, verifiedOn } from "./conferences.js?v=2026-10-12-dsl";
 import {
   FIELD_LABELS, daysUntil, deadlineSortValue, filterConferences, formatShanghaiTime,
   getNextMilestone, getStatus, getUpcomingMilestones, isUpcoming,
   monthKey, shanghaiDateKey, sortByNextMilestone, toIcs,
-} from "./dates.js?v=2026-09-27-nlp";
-import { matchConferences } from "./matching.js?v=2026-09-27-nlp";
-import { conferenceProfiles } from "./topic-data.js?v=2026-09-27-nlp";
+} from "./dates.js?v=2026-10-12-dsl";
+import { matchConferences } from "./matching.js?v=2026-10-12-dsl";
+import { conferenceProfiles } from "./topic-data.js?v=2026-10-12-dsl";
 
 const $ = (selector) => document.querySelector(selector);
 const state = { topic: "", query: "", field: "all", status: "all", view: "board", month: shanghaiDateKey(new Date()).slice(0, 7) };
